@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dados que não mentem – Saiba o que funciona nas suas campanhas</title>
-
+  <title>O Que o Gerenciador Não Mostra</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg: #0a0a0a;
-      --surface: #111111;
-      --card: #161616;
-      --border: #222222;
-      --accent: #00e5a0;
-      --accent2: #00b37e;
-      --warn: #ff6b35;
+      --surface: #111;
+      --card: #141414;
+      --border: #1f1f1f;
+      --gold: #c9a227;
+      --gold-light: #e8c04a;
+      --gold-dim: rgba(201,162,39,0.15);
       --text: #f0f0f0;
-      --muted: #888888;
-      --light: #cccccc;
-      --radius: 12px;
+      --muted: #777;
+      --light: #bbb;
+      --warn: #e05c2a;
+      --radius: 10px;
     }
 
     html { scroll-behavior: smooth; }
@@ -33,230 +33,323 @@
       overflow-x: hidden;
     }
 
-    /* NOISE TEXTURE */
-    body::before {
-      content: '';
+    /* ── GLOW ── */
+    .glow-top {
       position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    /* GLOW BLOBS */
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(120px);
+      top: -300px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(201,162,39,0.06) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
-    .blob-1 { width: 600px; height: 600px; background: rgba(0,229,160,0.07); top: -200px; left: -150px; }
-    .blob-2 { width: 500px; height: 500px; background: rgba(0,179,126,0.05); top: 50%; right: -200px; }
 
-    /* TYPOGRAPHY */
-    .font-display { font-family: Arial, sans-serif; }
+    /* ── LAYOUT ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    section { padding: 88px 0; }
 
-    /* LAYOUT */
-    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-    section { padding: 80px 0; }
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ─── HERO ─── */
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); }
+
+    /* ═══ HEADER / NAV ═══ */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-logo {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .topbar-cta {
+      background: var(--gold);
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 20px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .topbar-cta:hover { background: var(--gold-light); }
+
+    /* ═══ HERO ═══ */
     .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 100px 0 80px;
+      padding: 120px 0 80px;
       position: relative;
-      overflow: hidden;
     }
 
     .hero-eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(0,229,160,0.1);
-      border: 1px solid rgba(0,229,160,0.25);
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,162,39,0.3);
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       padding: 6px 14px;
       border-radius: 100px;
-      margin-bottom: 32px;
-      animation: fadeUp 0.6s ease both;
+      margin-bottom: 28px;
     }
 
     .hero-eyebrow::before {
       content: '';
-      width: 7px; height: 7px;
-      background: var(--accent);
+      width: 6px; height: 6px;
+      background: var(--gold);
       border-radius: 50%;
-      animation: pulse 2s infinite;
+      animation: blink 2s infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.7); }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     .hero h1 {
-      font-family: Arial, sans-serif;
-      font-size: clamp(36px, 4.5vw, 58px);
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-      animation: fadeUp 0.6s 0.1s ease both;
+      font-size: clamp(34px, 5vw, 62px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
     }
 
-    .hero h1 em {
-      font-style: normal;
-      color: var(--accent);
-      display: block;
-    }
+    .hero h1 .line-gold { color: var(--gold); display: block; }
+    .hero h1 .line-white { color: #fff; display: block; }
 
     .hero-sub {
       font-size: clamp(16px, 2vw, 19px);
       color: var(--light);
-      max-width: 540px;
-      line-height: 1.6;
-      margin-bottom: 48px;
-      animation: fadeUp 0.6s 0.2s ease both;
+      max-width: 580px;
+      line-height: 1.65;
+      margin: 20px 0 40px;
     }
 
-    .hero-sub strong { color: var(--text); font-weight: 500; }
+    .hero-sub strong { color: #fff; font-weight: 700; }
 
-    .hero-cta-wrap { animation: fadeUp 0.6s 0.3s ease both; text-align: center; max-width: 400px; }
+    .hero-cta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      max-width: 420px;
+    }
 
-    .btn-primary {
-      display: inline-flex;
+    .btn-main {
+      display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       width: 100%;
-      background: var(--accent);
+      background: var(--gold);
       color: #000;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      padding: 18px 36px;
+      font-size: 17px;
+      font-weight: 900;
+      padding: 20px 32px;
       border-radius: var(--radius);
       text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 0 40px rgba(0,229,160,0.3);
+      letter-spacing: 0.01em;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 40px rgba(201,162,39,0.25);
     }
 
-    .btn-primary:hover {
+    .btn-main:hover {
+      background: var(--gold-light);
       transform: translateY(-2px);
-      box-shadow: 0 0 60px rgba(0,229,160,0.45);
+      box-shadow: 0 0 60px rgba(201,162,39,0.4);
     }
-
-    .btn-primary svg { transition: transform 0.2s; }
-    .btn-primary:hover svg { transform: translateX(4px); }
 
     .hero-trust {
+      font-size: 13px;
+      color: var(--muted);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 20px;
-      color: var(--muted);
-      font-size: 13px;
-      max-width: 400px;
-      animation: fadeUp 0.6s 0.4s ease both;
+      gap: 8px;
     }
 
-    .hero-trust svg { color: var(--accent); flex-shrink: 0; }
+    .hero-trust svg { color: var(--gold); flex-shrink: 0; }
 
-    /* scrolling ticker */
+    /* stats strip */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 64px;
+    }
+
+    .stat-item {
+      background: var(--card);
+      padding: 26px 20px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label { font-size: 13px; color: var(--muted); }
+
+    @media (max-width: 500px) {
+      .stats-strip { grid-template-columns: 1fr; }
+      .hero-cta-block { align-items: stretch; }
+    }
+
+    /* ── TICKER ── */
     .ticker-wrap {
       overflow: hidden;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 14px 0;
+      padding: 13px 0;
       background: var(--surface);
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
     }
     .ticker {
       display: flex;
       gap: 48px;
       width: max-content;
-      animation: ticker 28s linear infinite;
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      animation: ticker 30s linear infinite;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--muted);
     }
-    .ticker span { color: var(--accent); }
+    .ticker span { color: var(--gold); }
     @keyframes ticker {
       from { transform: translateX(0); }
       to { transform: translateX(-50%); }
     }
 
-    /* ─── PROBLEM ─── */
-    .problem-block {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--warn);
-      border-radius: var(--radius);
-      padding: 32px;
-      margin-bottom: 16px;
-    }
-
-    .problem-block .label {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--warn);
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .problem-block p {
-      color: var(--light);
-      font-size: 16px;
-    }
-
-    /* ─── SECTION HEADERS ─── */
+    /* ═══ SECTION HEADERS ═══ */
     .section-tag {
       display: inline-block;
       font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 600;
-      margin-bottom: 16px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 14px;
     }
 
     .section-title {
-      font-family: Arial, sans-serif;
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 800;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 900;
       line-height: 1.15;
       letter-spacing: -0.02em;
       margin-bottom: 16px;
     }
 
+    .section-title em { font-style: normal; color: var(--gold); }
+
     .section-desc {
       color: var(--light);
       font-size: 17px;
-      max-width: 560px;
+      max-width: 580px;
+      line-height: 1.7;
     }
 
-    /* ─── BENEFITS ─── */
+    /* ═══ PROBLEMA ═══ */
+    .problem-intro {
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--light);
+      line-height: 1.6;
+      max-width: 680px;
+      margin-bottom: 48px;
+    }
+
+    .problem-intro strong { color: #fff; }
+
+    .pain-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pain-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--warn);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+    }
+
+    .pain-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .pain-item p { font-size: 15px; color: var(--light); line-height: 1.6; }
+    .pain-item p strong { color: #fff; }
+
+    /* transition line */
+    .transition-line {
+      text-align: center;
+      padding: 56px 0 40px;
+    }
+
+    .transition-line p {
+      font-size: clamp(20px, 3vw, 30px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .transition-line p em { font-style: normal; color: var(--gold); }
+
+    /* ═══ SOLUÇÃO ═══ */
+    .solution-intro {
+      background: var(--card);
+      border: 1px solid rgba(201,162,39,0.25);
+      border-radius: var(--radius);
+      padding: 36px;
+      margin-bottom: 48px;
+    }
+
+    .solution-intro p {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--light);
+      line-height: 1.7;
+    }
+
+    .solution-intro p strong { color: #fff; }
+
     .benefits-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 48px;
+      gap: 14px;
     }
 
     @media (max-width: 600px) { .benefits-grid { grid-template-columns: 1fr; } }
@@ -265,42 +358,30 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 28px;
+      padding: 26px;
       transition: border-color 0.2s, transform 0.2s;
     }
 
     .benefit-card:hover {
-      border-color: rgba(0,229,160,0.35);
+      border-color: rgba(201,162,39,0.3);
       transform: translateY(-3px);
     }
 
     .benefit-icon {
-      width: 44px; height: 44px;
-      background: rgba(0,229,160,0.1);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      font-size: 20px;
+      font-size: 26px;
+      margin-bottom: 12px;
     }
 
-    .benefit-card h3 {
-      font-family: Arial, sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
+    .benefit-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .benefit-card p { font-size: 14px; color: var(--light); line-height: 1.6; }
 
-    .benefit-card p { font-size: 14px; color: var(--light); }
-
-    /* ─── FOR WHO ─── */
+    /* ═══ PARA QUEM ═══ */
     .forwhom-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin-top: 40px;
+      gap: 12px;
+      margin-top: 36px;
     }
 
     .forwhom-list li {
@@ -310,56 +391,54 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px 24px;
+      padding: 18px 22px;
       font-size: 15px;
       color: var(--light);
+      line-height: 1.6;
     }
 
-    .forwhom-list li .check {
+    .check-icon {
       width: 22px; height: 22px;
-      background: rgba(0,229,160,0.12);
+      background: var(--gold-dim);
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
       margin-top: 1px;
-      font-size: 12px;
     }
 
-    /* ─── WHAT YOU GET ─── */
+    /* ═══ MÓDULOS ═══ */
     .modules {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-top: 48px;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      margin-top: 40px;
     }
 
     .module-item {
       display: flex;
       align-items: flex-start;
       gap: 20px;
-      padding: 24px 28px;
+      padding: 22px 26px;
       border-bottom: 1px solid var(--border);
       background: var(--card);
       transition: background 0.2s;
     }
 
     .module-item:last-child { border-bottom: none; }
-    .module-item:hover { background: #1a1a1a; }
+    .module-item:hover { background: #181818; }
 
     .module-num {
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--accent);
-      background: rgba(0,229,160,0.1);
-      border: 1px solid rgba(0,229,160,0.2);
-      width: 36px;
-      height: 36px;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,162,39,0.2);
+      width: 34px; height: 34px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -367,21 +446,15 @@
       flex-shrink: 0;
     }
 
-    .module-content h4 {
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
+    .module-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .module-content p { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-    .module-content p { font-size: 14px; color: var(--muted); }
-
-    /* ─── SOCIAL PROOF ─── */
+    /* ═══ DEPOIMENTOS ═══ */
     .testimonials {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 48px;
+      gap: 14px;
+      margin-top: 40px;
     }
 
     @media (max-width: 600px) { .testimonials { grid-template-columns: 1fr; } }
@@ -390,57 +463,48 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 28px;
+      padding: 26px;
     }
 
-    .stars { color: #f5c518; font-size: 14px; margin-bottom: 14px; }
+    .stars { color: var(--gold); font-size: 14px; margin-bottom: 12px; }
 
     .testimonial-card blockquote {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--light);
-      line-height: 1.6;
+      line-height: 1.65;
       margin-bottom: 18px;
+      font-style: italic;
     }
 
-    .author {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .author { display: flex; align-items: center; gap: 10px; }
 
     .avatar {
-      width: 36px; height: 36px;
+      width: 34px; height: 34px;
       border-radius: 50%;
-      background: var(--border);
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,162,39,0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .author-info .name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .author-info .role {
       font-size: 12px;
-      color: var(--muted);
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
     }
 
-    /* ─── PRICING ─── */
+    .author-name { font-size: 13px; font-weight: 700; }
+    .author-role { font-size: 12px; color: var(--muted); }
+
+    /* ═══ PRICING ═══ */
     .pricing-card {
       background: var(--card);
-      border: 1px solid rgba(0,229,160,0.3);
-      border-radius: 16px;
-      padding: 48px;
-      max-width: 560px;
+      border: 1px solid rgba(201,162,39,0.3);
+      border-radius: 14px;
+      padding: 48px 40px;
+      max-width: 520px;
       margin: 48px auto 0;
       text-align: center;
-      box-shadow: 0 0 80px rgba(0,229,160,0.08);
+      box-shadow: 0 0 80px rgba(201,162,39,0.07);
       position: relative;
       overflow: hidden;
     }
@@ -450,43 +514,49 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
-    .pricing-label {
+    .pricing-badge {
+      display: inline-block;
       font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 600;
-      margin-bottom: 24px;
+      color: var(--gold);
+      font-weight: 700;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,162,39,0.25);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
     }
 
     .pricing-original {
       font-size: 16px;
       color: var(--muted);
       text-decoration: line-through;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .pricing-price {
-      font-family: Arial, sans-serif;
-      font-size: 72px;
-      font-weight: 800;
+      font-size: 80px;
+      font-weight: 900;
       line-height: 1;
       letter-spacing: -0.04em;
-      margin-bottom: 8px;
+      color: #fff;
+      margin-bottom: 6px;
     }
 
     .pricing-price sup {
       font-size: 28px;
       vertical-align: top;
-      margin-top: 16px;
+      margin-top: 18px;
       display: inline-block;
+      color: var(--muted);
     }
 
     .pricing-once {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--muted);
       margin-bottom: 32px;
     }
@@ -495,7 +565,7 @@
       list-style: none;
       text-align: left;
       margin: 0 auto 36px;
-      max-width: 360px;
+      max-width: 340px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -505,57 +575,57 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 15px;
+      font-size: 14px;
       color: var(--light);
     }
 
     .pricing-includes li::before {
       content: '✓';
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 14px;
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 13px;
       flex-shrink: 0;
     }
 
-    .btn-pricing {
+    .btn-checkout {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       width: 100%;
-      background: var(--accent);
+      background: var(--gold);
       color: #000;
-      font-family: Arial, sans-serif;
       font-size: 18px;
-      font-weight: 800;
-      padding: 20px 36px;
+      font-weight: 900;
+      padding: 22px 32px;
       border-radius: var(--radius);
       text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 0 40px rgba(0,229,160,0.35);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 40px rgba(201,162,39,0.3);
       letter-spacing: 0.01em;
     }
 
-    .btn-pricing:hover {
+    .btn-checkout:hover {
+      background: var(--gold-light);
       transform: translateY(-2px);
-      box-shadow: 0 0 64px rgba(0,229,160,0.5);
+      box-shadow: 0 0 64px rgba(201,162,39,0.5);
     }
 
-    .guarantee {
+    .guarantee-row {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 20px;
+      margin-top: 18px;
       font-size: 13px;
       color: var(--muted);
     }
 
-    .guarantee svg { color: var(--accent); }
+    .guarantee-row svg { color: var(--gold); flex-shrink: 0; }
 
-    /* ─── FAQ ─── */
+    /* ═══ FAQ ═══ */
     .faq-list {
-      margin-top: 48px;
+      margin-top: 40px;
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -569,11 +639,10 @@
     }
 
     summary {
-      padding: 22px 28px;
+      padding: 20px 24px;
       cursor: pointer;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
       list-style: none;
       display: flex;
       align-items: center;
@@ -587,7 +656,7 @@
     summary::after {
       content: '+';
       font-size: 22px;
-      color: var(--accent);
+      color: var(--gold);
       font-weight: 300;
       flex-shrink: 0;
       transition: transform 0.2s;
@@ -596,467 +665,456 @@
     details[open] summary::after { transform: rotate(45deg); }
 
     details .faq-body {
-      padding: 0 28px 22px;
+      padding: 0 24px 20px;
       color: var(--light);
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.7;
     }
 
-    /* ─── FINAL CTA ─── */
+    /* ═══ FINAL CTA ═══ */
     .final-cta {
       text-align: center;
       padding: 100px 0;
       border-top: 1px solid var(--border);
     }
 
-    .final-cta .section-title { margin-bottom: 16px; }
-    .final-cta .section-desc { margin: 0 auto 40px; text-align: center; }
+    .final-cta .section-title { margin-bottom: 14px; }
+    .final-cta .section-desc { margin: 0 auto 36px; text-align: center; }
 
-    /* ─── FOOTER ─── */
+    .final-cta-btn-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* ═══ FOOTER ═══ */
     footer {
       border-top: 1px solid var(--border);
-      padding: 32px 0;
+      padding: 28px 0;
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
+      line-height: 1.8;
     }
-
-    /* ─── DIVIDER ─── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 0;
-    }
-
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ─── HIGHLIGHT ─── */
-    .highlight { color: var(--accent); }
-
-    /* ─── COUNTER STRIP ─── */
-    .stats-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-top: 60px;
-    }
-
-    .stat-item {
-      background: var(--card);
-      padding: 28px 24px;
-      text-align: center;
-    }
-
-    .stat-num {
-      font-family: Arial, sans-serif;
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .stat-label { font-size: 13px; color: var(--muted); }
-
-    @media (max-width: 500px) { .stats-strip { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="container">
-      <div class="hero-eyebrow">Para quem investe em tráfego pago</div>
-      <h1>
-        <em>Dados que não mentem.</em>
-        Campanhas que realmente funcionam.
-      </h1>
-      <p class="hero-sub">
-        Saiba <strong>exatamente o que está funcionando</strong> nas suas campanhas em menos de 2 horas — e invista com segurança a partir de hoje.
-      </p>
-      <div class="hero-cta-wrap">
-        <a href="#pricing" class="btn-primary">
-          Quero acesso agora
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="hero-trust">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Acesso imediato · Pagamento seguro · Sem mensalidade
-      </div>
+<div class="glow-top"></div>
 
-      <div class="stats-strip reveal">
-        <div class="stat-item">
-          <div class="stat-num">+2h</div>
-          <div class="stat-label">Para ter clareza total</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">0%</div>
-          <div class="stat-label">De achismo nas decisões</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">R$67</div>
-          <div class="stat-label">Investimento único</div>
-        </div>
+<!-- ── TOPBAR ── -->
+<nav class="topbar">
+  <span class="topbar-logo">O Que o Gerenciador Não Mostra</span>
+  <a href="https://pay.hotmart.com/J105631021H" class="topbar-cta">Quero acesso — R$67</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+
+    <div class="hero-eyebrow">Para donos de e-commerce e gestores de tráfego</div>
+
+    <h1>
+      <span class="line-gold">O Que o Gerenciador</span>
+      <span class="line-white">Não Mostra.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Saiba <strong>exatamente o que está funcionando</strong> nas suas campanhas em menos de 2 horas — e tome decisões de investimento com muito mais segurança.
+    </p>
+
+    <div class="hero-cta-block">
+      <a href="https://pay.hotmart.com/J105631021H" class="btn-main">
+        Quero acesso agora
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-trust">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Acesso imediato · Garantia de 7 dias · R$67 único
       </div>
     </div>
-  </section>
 
-  <!-- TICKER -->
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <span>●</span> Sem achismos &nbsp;
-      <span>●</span> Dados confiáveis &nbsp;
-      <span>●</span> Decisões mais rápidas &nbsp;
-      <span>●</span> Campanhas rentáveis &nbsp;
-      <span>●</span> Meta Ads · Google Ads &nbsp;
-      <span>●</span> Análise em 2 horas &nbsp;
-      <span>●</span> Sem achismos &nbsp;
-      <span>●</span> Dados confiáveis &nbsp;
-      <span>●</span> Decisões mais rápidas &nbsp;
-      <span>●</span> Campanhas rentáveis &nbsp;
-      <span>●</span> Meta Ads · Google Ads &nbsp;
-      <span>●</span> Análise em 2 horas &nbsp;
+    <div class="stats-strip reveal">
+      <div class="stat-item">
+        <div class="stat-num">&lt;2h</div>
+        <div class="stat-label">De conteúdo direto ao ponto</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">0%</div>
+        <div class="stat-label">De achismo nas decisões</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">R$67</div>
+        <div class="stat-label">Investimento único</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>●</span> Meta Ads &nbsp;
+    <span>●</span> TikTok Ads &nbsp;
+    <span>●</span> Pinterest Ads &nbsp;
+    <span>●</span> Google Analytics 4 &nbsp;
+    <span>●</span> Decisões com dados reais &nbsp;
+    <span>●</span> Sem achismo &nbsp;
+    <span>●</span> Campanhas rentáveis &nbsp;
+    <span>●</span> Meta Ads &nbsp;
+    <span>●</span> TikTok Ads &nbsp;
+    <span>●</span> Pinterest Ads &nbsp;
+    <span>●</span> Google Analytics 4 &nbsp;
+    <span>●</span> Decisões com dados reais &nbsp;
+    <span>●</span> Sem achismo &nbsp;
+    <span>●</span> Campanhas rentáveis &nbsp;
+  </div>
+</div>
+
+<!-- ═══ PROBLEMA ═══ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">O problema</span>
+      <h2 class="section-title">Você olha para os números.<br>Mas os números <em>te enganam</em>.</h2>
+      <p class="problem-intro">
+        O gerenciador de anúncios foi criado para <strong>vender mais anúncios</strong> — não para te contar a verdade sobre seus resultados. E enquanto você confia cegamente nesses relatórios, dinheiro continua saindo para campanhas que não funcionam do jeito que parecem.
+      </p>
+    </div>
+
+    <div class="pain-list">
+      <div class="pain-item reveal">
+        <div class="pain-icon">📊</div>
+        <p>Você aumenta o orçamento de uma campanha com base nos dados do gerenciador — e no fim do mês descobre que <strong>o resultado real foi bem diferente</strong>.</p>
+      </div>
+      <div class="pain-item reveal">
+        <div class="pain-icon">🔁</div>
+        <p>Você tem GA4 instalado, mas nunca sabe se está configurado certo. <strong>Você desconfia dos dados, mas não sabe por onde começar a confiar.</strong></p>
+      </div>
+      <div class="pain-item reveal">
+        <div class="pain-icon">💸</div>
+        <p>Você investe todo mês em tráfego sem ter certeza do que está funcionando de verdade. <strong>Escala no feeling. Pausa no desespero.</strong></p>
+      </div>
+      <div class="pain-item reveal">
+        <div class="pain-icon">🤷</div>
+        <p>Você tem agência ou gestor de tráfego, mas na hora da reunião <strong>não consegue questionar os números porque não sabe de onde vieram</strong>.</p>
+      </div>
+    </div>
+
+    <div class="transition-line reveal">
+      <p>E se você pudesse olhar para os seus dados<br>e <em>saber exatamente o que está acontecendo</em>?</p>
     </div>
   </div>
+</section>
 
-  <!-- ═══ PROBLEMA ═══ -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">O problema</span>
-        <h2 class="section-title">Você <em class="highlight">sente</em> que as campanhas funcionam.<br>Mas os dados dizem outra coisa.</h2>
-        <p class="section-desc">Você não tem como crescer o que não consegue medir com precisão.</p>
+<div class="divider"></div>
+
+<!-- ═══ SOLUÇÃO ═══ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">A solução</span>
+      <h2 class="section-title">O que o gerenciador esconde,<br>o <em>GA4 revela</em>.</h2>
+    </div>
+
+    <div class="solution-intro reveal">
+      <p>
+        <strong>O Que o Gerenciador Não Mostra</strong> é um treinamento com menos de 2 horas de conteúdo que te ensina a usar o Google Analytics 4 como fonte de verdade para suas campanhas — integrando Meta Ads, TikTok Ads e Pinterest Ads num ambiente único, confiável e pronto para tomada de decisão.
+      </p>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">🎯</div>
+        <h3>Dados que você pode confiar</h3>
+        <p>Entenda a diferença entre o que o gerenciador reporta e o que realmente aconteceu na sua loja.</p>
       </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">⚡</div>
+        <h3>Análise em minutos</h3>
+        <p>Um processo direto para saber quais campanhas estão gerando resultado de verdade — sem precisar de planilha complexa.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">🔗</div>
+        <h3>Integração completa</h3>
+        <p>Meta Ads, TikTok Ads e Pinterest Ads todos conectados e rastreados corretamente no GA4.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">💡</div>
+        <h3>Decisões com segurança</h3>
+        <p>Pare de escalar no achismo. Saiba exatamente quando aumentar, pausar ou redistribuir o orçamento.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px;">
-        <div class="problem-block reveal">
-          <div class="label">Problema 01</div>
-          <p>Você olha para os painéis e não sabe quais métricas realmente indicam lucro — e quais são só vaidade disfarçada de resultado.</p>
+<div class="divider"></div>
+
+<!-- ═══ PARA QUEM ═══ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">Para quem é</span>
+      <h2 class="section-title">Este treinamento foi feito pra você se…</h2>
+    </div>
+
+    <ul class="forwhom-list">
+      <li class="reveal">
+        <span class="check-icon">✓</span>
+        Você tem um e-commerce e investe em tráfego pago — mas nunca teve certeza se os dados que recebe são realmente confiáveis.
+      </li>
+      <li class="reveal">
+        <span class="check-icon">✓</span>
+        Você é gestor de tráfego e quer entregar relatórios mais sólidos, baseados em dados de primeira parte — não só no painel da plataforma.
+      </li>
+      <li class="reveal">
+        <span class="check-icon">✓</span>
+        Você tem GA4 instalado mas nunca soube se está configurado do jeito certo para analisar campanhas pagas.
+      </li>
+      <li class="reveal">
+        <span class="check-icon">✓</span>
+        Você tem agência ou gestor de tráfego e quer entender os números para cobrar resultados de verdade.
+      </li>
+      <li class="reveal">
+        <span class="check-icon">✓</span>
+        Você quer parar de tomar decisões de investimento baseadas em "achismo" e começar a usar dados para crescer com mais segurança.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ MÓDULOS ═══ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">O que você vai aprender</span>
+      <h2 class="section-title">Tudo que você precisa.<br>Nada que você não vai usar.</h2>
+      <p class="section-desc">Menos de 2 horas. Conteúdo denso, prático e direto ao resultado.</p>
+    </div>
+
+    <div class="modules reveal">
+      <div class="module-item">
+        <div class="module-num">01</div>
+        <div class="module-content">
+          <h4>Por que o gerenciador mente — e o que fazer com isso</h4>
+          <p>Entenda a diferença entre atribuição do gerenciador e dados reais de conversão, e por que isso muda tudo na hora de decidir.</p>
         </div>
-        <div class="problem-block reveal">
-          <div class="label">Problema 02</div>
-          <p>Você aumenta o orçamento "no feeling", sem entender de onde vêm as conversões que realmente acontecem.</p>
+      </div>
+      <div class="module-item">
+        <div class="module-num">02</div>
+        <div class="module-content">
+          <h4>Estruturando o GA4 como fonte de verdade</h4>
+          <p>Como configurar corretamente o ambiente para que os dados reflitam o que realmente está acontecendo na sua operação.</p>
         </div>
-        <div class="problem-block reveal">
-          <div class="label">Problema 03</div>
-          <p>Você já teve campanhas "indo bem" que no fim do mês não pagavam nem as próprias custas.</p>
+      </div>
+      <div class="module-item">
+        <div class="module-num">03</div>
+        <div class="module-content">
+          <h4>Integrando Meta Ads, TikTok Ads e Pinterest Ads</h4>
+          <p>Passo a passo para conectar cada plataforma ao GA4 e ter uma visão unificada e confiável do desempenho das campanhas.</p>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">04</div>
+        <div class="module-content">
+          <h4>Como ler os dados e tomar decisões</h4>
+          <p>Quais relatórios olhar, como interpretar os números e quando escalar, pausar ou redistribuir orçamento — com base em evidências.</p>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">05</div>
+        <div class="module-content">
+          <h4>Bônus: Rotina semanal de análise</h4>
+          <p>Um processo simples e replicável para monitorar suas campanhas toda semana em menos de 30 minutos.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="divider"></div>
+<div class="divider"></div>
 
-  <!-- ═══ SOLUÇÃO ═══ -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">A solução</span>
-        <h2 class="section-title">Em menos de 2 horas você vai saber o que está — e o que não está — dando retorno.</h2>
-        <p class="section-desc">
-          <strong>Dados que não mentem</strong> é um material prático e direto que te mostra como interpretar os números certos para tomar decisões sem hesitação.
-        </p>
+<!-- ═══ DEPOIMENTOS ═══ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">Resultados</span>
+      <h2 class="section-title">Quem aplicou, sentiu a diferença.</h2>
+    </div>
+
+    <div class="testimonials">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Eu tinha GA4 instalado há meses e nunca soube usar. Em menos de 2 horas entendi o que estava funcionando e pausei duas campanhas que estavam drenando meu orçamento."</blockquote>
+        <div class="author">
+          <div class="avatar">MR</div>
+          <div>
+            <div class="author-name">Mariana R.</div>
+            <div class="author-role">Dona de e-commerce de moda</div>
+          </div>
+        </div>
       </div>
-
-      <div class="benefits-grid">
-        <div class="benefit-card reveal">
-          <div class="benefit-icon">📊</div>
-          <h3>Métricas que importam</h3>
-          <p>Aprenda a separar o que é dado real de resultado do que é número cosmético.</p>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Sempre confiei cegamente nos relatórios da Meta. Depois do treinamento percebi que estava atribuindo resultados errados e escalando as campanhas erradas."</blockquote>
+        <div class="author">
+          <div class="avatar">FS</div>
+          <div>
+            <div class="author-name">Felipe S.</div>
+            <div class="author-role">Gestor de Tráfego</div>
+          </div>
         </div>
-        <div class="benefit-card reveal">
-          <div class="benefit-icon">⚡</div>
-          <h3>Diagnóstico rápido</h3>
-          <p>Um processo claro para analisar qualquer campanha em minutos, não horas perdidas.</p>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Minha agência me mandava relatório todo mês e eu não entendia nada. Agora consigo questionar os números e cobrar resultado de verdade."</blockquote>
+        <div class="author">
+          <div class="avatar">CL</div>
+          <div>
+            <div class="author-name">Carla L.</div>
+            <div class="author-role">Empreendedora digital</div>
+          </div>
         </div>
-        <div class="benefit-card reveal">
-          <div class="benefit-icon">🎯</div>
-          <h3>Decisões com segurança</h3>
-          <p>Chega de aumentar ou pausar campanha no achismo. Decida com base em evidências.</p>
-        </div>
-        <div class="benefit-card reveal">
-          <div class="benefit-icon">🔁</div>
-          <h3>Processo replicável</h3>
-          <p>Uma estrutura de análise que você aplica toda semana — para qualquer conta.</p>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Direto, prático e sem enrolação. Aprendi mais sobre análise de campanhas nessas 2 horas do que em vários cursos que fiz antes."</blockquote>
+        <div class="author">
+          <div class="avatar">TM</div>
+          <div>
+            <div class="author-name">Thiago M.</div>
+            <div class="author-role">Gestor de Tráfego</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="divider"></div>
+<div class="divider"></div>
 
-  <!-- ═══ PARA QUEM ═══ -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Para quem é</span>
-        <h2 class="section-title">Este material é pra você se…</h2>
-      </div>
+<!-- ═══ PRICING ═══ -->
+<section id="pricing">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <span class="section-tag">Investimento</span>
+      <h2 class="section-title">Acesso completo por menos do que<br>1 dia de anúncio mal investido.</h2>
+    </div>
 
-      <ul class="forwhom-list">
-        <li class="reveal">
-          <span class="check">✓</span>
-          Você gerencia campanhas de tráfego pago e quer parar de depender de "achismo" para tomar decisões.
-        </li>
-        <li class="reveal">
-          <span class="check">✓</span>
-          Você é gestor de tráfego ou empreendedor e quer entender se o dinheiro investido em anúncios está realmente voltando.
-        </li>
-        <li class="reveal">
-          <span class="check">✓</span>
-          Você sente que os relatórios de plataforma te enganam — e quer saber como chegar nos dados de verdade.
-        </li>
-        <li class="reveal">
-          <span class="check">✓</span>
-          Você quer uma rotina de análise simples, rápida e que funcione toda semana.
-        </li>
+    <div class="pricing-card reveal">
+      <div class="pricing-badge">Oferta de lançamento</div>
+      <div class="pricing-original">De R$ 197,00</div>
+      <div class="pricing-price"><sup>R$</sup>67</div>
+      <div class="pricing-once">pagamento único · acesso imediato e vitalício</div>
+
+      <ul class="pricing-includes">
+        <li>Treinamento completo em vídeo (&lt;2h)</li>
+        <li>Integração Meta Ads, TikTok Ads e Pinterest</li>
+        <li>Análise de campanhas com GA4</li>
+        <li>Rotina semanal de análise (bônus)</li>
+        <li>Acesso vitalício com atualizações inclusas</li>
       </ul>
-    </div>
-  </section>
 
-  <div class="divider"></div>
+      <a href="https://pay.hotmart.com/J105631021H" class="btn-checkout">
+        Quero acesso agora por R$67
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
 
-  <!-- ═══ O QUE VOCÊ RECEBE ═══ -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">O que você recebe</span>
-        <h2 class="section-title">Tudo que você precisa para ter clareza imediata.</h2>
-      </div>
-
-      <div class="modules reveal">
-        <div class="module-item">
-          <div class="module-num">01</div>
-          <div class="module-content">
-            <h4>As métricas que revelam o que funciona</h4>
-            <p>Quais números olhar primeiro — e como interpretá-los para chegar na verdade da campanha.</p>
-          </div>
-        </div>
-        <div class="module-item">
-          <div class="module-num">02</div>
-          <div class="module-content">
-            <h4>O diagnóstico em 5 perguntas</h4>
-            <p>Um checklist prático para avaliar qualquer campanha em menos de 30 minutos.</p>
-          </div>
-        </div>
-        <div class="module-item">
-          <div class="module-num">03</div>
-          <div class="module-content">
-            <h4>Quando escalar, pausar ou ajustar</h4>
-            <p>Critérios objetivos para tomar a decisão certa no momento certo — sem pressão e sem incerteza.</p>
-          </div>
-        </div>
-        <div class="module-item">
-          <div class="module-num">04</div>
-          <div class="module-content">
-            <h4>Rotina semanal de análise</h4>
-            <p>Uma estrutura para monitorar suas campanhas de forma consistente e previsível.</p>
-          </div>
-        </div>
-        <div class="module-item">
-          <div class="module-num">05</div>
-          <div class="module-content">
-            <h4>Bônus: Planilha de acompanhamento</h4>
-            <p>Modelo pronto para registrar, comparar e visualizar a evolução das suas campanhas semana a semana.</p>
-          </div>
-        </div>
+      <div class="guarantee-row">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Garantia incondicional de 7 dias — sem perguntas
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="divider"></div>
+<div class="divider"></div>
 
-  <!-- ═══ DEPOIMENTOS ═══ -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">O que dizem</span>
-        <h2 class="section-title">Resultados reais de quem já aplicou.</h2>
-      </div>
+<!-- ═══ FAQ ═══ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">Perguntas frequentes</span>
+      <h2 class="section-title">Ainda tem dúvidas?</h2>
+    </div>
 
-      <div class="testimonials">
-        <div class="testimonial-card reveal">
-          <div class="stars">★★★★★</div>
-          <blockquote>"Finalmente entendi o que os números estavam me dizendo. Em 2 horas reorganizei minhas campanhas e na semana seguinte o custo por lead caiu 38%."</blockquote>
-          <div class="author">
-            <div class="avatar">MR</div>
-            <div class="author-info">
-              <div class="name">Mariana R.</div>
-              <div class="role">Gestora de Tráfego</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card reveal">
-          <div class="stars">★★★★★</div>
-          <blockquote>"Eu achava que entendia de métricas. Esse material me mostrou que estava olhando pro lugar errado o tempo todo. Mudou minha abordagem completamente."</blockquote>
-          <div class="author">
-            <div class="avatar">FS</div>
-            <div class="author-info">
-              <div class="name">Felipe S.</div>
-              <div class="role">Empreendedor Digital</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card reveal">
-          <div class="stars">★★★★★</div>
-          <blockquote>"Direto ao ponto, sem enrolação. Exatamente o que eu precisava pra parar de desperdiçar dinheiro em campanha que não estava funcionando."</blockquote>
-          <div class="author">
-            <div class="avatar">CL</div>
-            <div class="author-info">
-              <div class="name">Carla L.</div>
-              <div class="role">Lojista Online</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card reveal">
-          <div class="stars">★★★★★</div>
-          <blockquote>"Passei a tomar decisões em 10 minutos que antes levavam o dia inteiro — e com muito mais confiança. Vale muito mais do que o preço."</blockquote>
-          <div class="author">
-            <div class="avatar">TM</div>
-            <div class="author-info">
-              <div class="name">Thiago M.</div>
-              <div class="role">Gestor de Tráfego</div>
-            </div>
-          </div>
-        </div>
+    <div class="faq-list reveal">
+      <details>
+        <summary>Esse treinamento é para quem?</summary>
+        <div class="faq-body">Para donos de e-commerce, gestores de tráfego e profissionais de marketing que querem entender com mais clareza o que realmente está funcionando nas suas campanhas.</div>
+      </details>
+      <details>
+        <summary>Preciso ter conhecimento técnico em Google Analytics?</summary>
+        <div class="faq-body">Não. O treinamento foi desenvolvido para ser simples e direto ao ponto, mesmo para quem não possui experiência avançada com Analytics.</div>
+      </details>
+      <details>
+        <summary>Quanto tempo leva para assistir o treinamento?</summary>
+        <div class="faq-body">O treinamento completo possui menos de 2 horas de conteúdo e pode ser assistido no seu próprio ritmo.</div>
+      </details>
+      <details>
+        <summary>Eu já tenho Google Analytics instalado. Ainda faz sentido?</summary>
+        <div class="faq-body">Sim. Muitos e-commerces possuem o GA4 instalado, mas configurado de forma incompleta ou sem as integrações necessárias para analisar corretamente os resultados das campanhas.</div>
+      </details>
+      <details>
+        <summary>Tenho uma agência ou gestor de tráfego. Ainda preciso disso?</summary>
+        <div class="faq-body">Sim. O objetivo do treinamento não é substituir sua agência ou gestor, mas ajudar você a entender melhor os dados da sua operação para tomar decisões com mais segurança — e cobrar resultados com embasamento.</div>
+      </details>
+      <details>
+        <summary>O treinamento serve para quais plataformas de anúncio?</summary>
+        <div class="faq-body">Você verá como integrar e analisar dados de Meta Ads, TikTok Ads e Pinterest Ads através do Google Analytics 4.</div>
+      </details>
+      <details>
+        <summary>Terei acesso imediato após a compra?</summary>
+        <div class="faq-body">Sim. Após a confirmação do pagamento, o acesso é liberado automaticamente pela plataforma Hotmart.</div>
+      </details>
+      <details>
+        <summary>Existe garantia?</summary>
+        <div class="faq-body">Sim. Você possui 7 dias de garantia incondicional. Se entender que o treinamento não faz sentido para você, basta solicitar o reembolso dentro desse prazo e devolvemos 100% do valor.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══ -->
+<section class="final-cta">
+  <div class="container">
+    <span class="section-tag reveal">Última chamada</span>
+    <h2 class="section-title reveal">Cada real investido sem dados confiáveis<br>é dinheiro que <em>não volta</em>.</h2>
+    <p class="section-desc reveal">Em menos de 2 horas você passa a saber exatamente o que está funcionando — e investe com muito mais segurança a partir de hoje.</p>
+    <div class="final-cta-btn-wrap reveal">
+      <a href="https://pay.hotmart.com/J105631021H" class="btn-main" style="font-size:18px; padding: 22px 32px;">
+        Quero acesso agora — R$67
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-trust" style="justify-content:center;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Garantia de 7 dias · Acesso imediato · Pagamento seguro
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="divider"></div>
+<footer>
+  <div class="container">
+    <p>© 2025 O Que o Gerenciador Não Mostra. Todos os direitos reservados.</p>
+    <p style="margin-top:6px">Produto 100% digital distribuído pela Hotmart. Acesso liberado imediatamente após a confirmação do pagamento.</p>
+  </div>
+</footer>
 
-  <!-- ═══ PRICING ═══ -->
-  <section id="pricing">
-    <div class="container">
-      <div class="reveal" style="text-align:center">
-        <span class="section-tag">Investimento</span>
-        <h2 class="section-title">Acesso completo por muito menos do que você imagina.</h2>
-      </div>
-
-      <div class="pricing-card reveal">
-        <div class="pricing-label">Oferta de lançamento</div>
-        <div class="pricing-original">De R$ 197,00</div>
-        <div class="pricing-price">
-          <sup>R$</sup>67
-        </div>
-        <div class="pricing-once">pagamento único · acesso imediato e vitalício</div>
-
-        <ul class="pricing-includes">
-          <li>Material completo em PDF</li>
-          <li>Checklist de diagnóstico de campanhas</li>
-          <li>Rotina semanal de análise</li>
-          <li>Planilha de acompanhamento (bônus)</li>
-          <li>Atualizações inclusas sem custo extra</li>
-        </ul>
-
-        <a href="#" class="btn-pricing">
-          Quero acesso agora por R$67
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <div class="guarantee">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Garantia de 7 dias — sem perguntas
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ═══ FAQ ═══ -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Perguntas frequentes</span>
-        <h2 class="section-title">Ainda tem dúvidas?</h2>
-      </div>
-
-      <div class="faq-list reveal">
-        <details>
-          <summary>Para qual plataforma de anúncios esse material serve?</summary>
-          <div class="faq-body">O conteúdo se aplica principalmente a Meta Ads (Facebook e Instagram) e Google Ads, mas os princípios de análise valem para qualquer plataforma de tráfego pago.</div>
-        </details>
-        <details>
-          <summary>Preciso ter experiência avançada em marketing?</summary>
-          <div class="faq-body">Não. O material foi criado para ser direto e acessível para quem já tem campanhas rodando, mesmo que seja iniciante na análise de dados. Se você sabe o que é CPC, CTR e ROAS, já tem o suficiente para aproveitar 100%.</div>
-        </details>
-        <details>
-          <summary>Como recebo após a compra?</summary>
-          <div class="faq-body">O acesso é imediato. Assim que o pagamento for confirmado, você recebe no seu e-mail o link para baixar o material completo.</div>
-        </details>
-        <details>
-          <summary>E se eu não gostar ou não ver valor?</summary>
-          <div class="faq-body">Você tem 7 dias de garantia incondicional. Se por qualquer motivo não ficar satisfeito, basta enviar um e-mail e devolvemos 100% do valor sem burocracia.</div>
-        </details>
-        <details>
-          <summary>O pagamento é seguro?</summary>
-          <div class="faq-body">Sim. O pagamento é processado por plataformas certificadas com criptografia SSL. Seus dados estão protegidos em todas as etapas.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FINAL CTA ═══ -->
-  <section class="final-cta">
-    <div class="container">
-      <span class="section-tag reveal">Última chamada</span>
-      <h2 class="section-title reveal">Cada dia sem dados confiáveis<br>é dinheiro saindo pelo ralo.</h2>
-      <p class="section-desc reveal">Em menos de 2 horas você pode ter clareza total sobre o que funciona — e o que precisa mudar.</p>
-      <div class="reveal">
-        <a href="#pricing" class="btn-primary" style="font-size: 18px; padding: 20px 42px;">
-          Quero dados que não mentem
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <div class="hero-trust" style="justify-content:center; margin-top: 16px;">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Garantia de 7 dias · Acesso imediato · R$67 único
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <p>© 2024 Dados que não mentem. Todos os direitos reservados.</p>
-      <p style="margin-top: 8px;">Este produto é 100% digital. Após a compra, o acesso é enviado por e-mail imediatamente.</p>
-    </div>
-  </footer>
-
-  <script>
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
-  </script>
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
