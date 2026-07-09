@@ -4,7 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Método das Vendas Reais</title>
-  <meta name="description" content="Saiba exatamente o que gera cada venda do seu e-commerce em 7 dias, sem depender do gerenciador de anúncios." />
+  <meta name="description" content="Descubra o que realmente gera cada venda do seu e-commerce já no primeiro dia, sem depender do gerenciador de anúncios." />
+
+  <!-- ARTUR: confirme a URL final da página (GitHub Pages) e a imagem de preview -->
+  <link rel="canonical" href="https://becker05.github.io/metodo-das-vendas-reais/" />
+
+  <!-- OPEN GRAPH / PREVIEW DE LINK (WhatsApp, Instagram, etc.)
+       Sem isso o preview do link sai "pelado" e derruba o clique.
+       ARTUR: suba uma imagem 1200x630 (ex.: og.jpg com o comparativo 522 vs 250)
+       na raiz do repo e ajuste a URL abaixo. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Método das Vendas Reais" />
+  <meta property="og:title" content="Descubra o que realmente gera cada venda do seu e-commerce" />
+  <meta property="og:description" content="Saiba a origem real de cada venda já no primeiro dia, sem depender do gerenciador de anúncios." />
+  <meta property="og:url" content="https://becker05.github.io/metodo-das-vendas-reais/" />
+  <meta property="og:image" content="https://becker05.github.io/metodo-das-vendas-reais/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Descubra o que realmente gera cada venda do seu e-commerce" />
+  <meta name="twitter:description" content="Saiba a origem real de cada venda já no primeiro dia, sem depender do gerenciador de anúncios." />
+  <meta name="twitter:image" content="https://becker05.github.io/metodo-das-vendas-reais/og.jpg" />
+
+  <!-- CONSENT MODE v2 (padrão da casa — você ensina isso).
+       Deixei PRONTO mas COMENTADO de propósito: se ativar 'denied' sem um banner
+       que faça o update para 'granted', você BLOQUEIA sua própria medição.
+       Para usar: descomente e conecte a um CMP/banner que chame gtag('consent','update',...).
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+  -->
 
   <!-- GOOGLE TAG MANAGER - INSERIR SEU ID GTM AQUI
   Substitua GTM-XXXXXXX pelo seu ID.
@@ -412,6 +450,37 @@
       font-weight: 900;
     }
 
+    /* AUTORIDADE (quem ensina) */
+    .author-card {
+      display: grid;
+      grid-template-columns: 104px 1fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .author-photo {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(34, 229, 143, .34);
+      background: rgba(34, 229, 143, .1);
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      font-weight: 900;
+      font-size: 30px;
+    }
+
+    .author-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .author-chips .tag { margin-bottom: 0; }
+
     .modules {
       counter-reset: module;
     }
@@ -450,6 +519,26 @@
       border-left: 4px solid var(--green);
       padding-left: 18px;
       margin: 0;
+    }
+
+    /* DEPOIMENTO */
+    .testimonial {
+      border-left: 4px solid var(--green);
+      padding: 4px 0 4px 20px;
+      margin: 0;
+    }
+
+    .testimonial p {
+      font-size: 20px;
+      color: #e7edf6;
+      margin-bottom: 10px;
+    }
+
+    .testimonial cite {
+      color: var(--muted);
+      font-style: normal;
+      font-weight: 800;
+      font-size: 14px;
     }
 
     .offer {
@@ -554,6 +643,9 @@
       .brand { justify-content: center; }
       .compare { grid-template-columns: 1fr; }
       .offer-box { padding: 22px; }
+      .author-card { grid-template-columns: 1fr; text-align: center; }
+      .author-photo { margin: 0 auto; }
+      .author-chips { justify-content: center; }
     }
   </style>
 </head>
@@ -589,14 +681,16 @@
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <span class="eyebrow">Para donos de e-commerce que já anunciam</span>
-          <h1>Descubra quais vendas do seu e-commerce são reais.</h1>
-          <p class="lead">Saiba exatamente o que gera cada venda do seu e-commerce já no primeiro dia, sem depender do gerenciador de anúncios</p>
+          <h1>Pare de escalar a campanha errada por causa de número inflado.</h1>
+          <p class="lead">Saiba exatamente o que gera cada venda do seu e-commerce já no primeiro dia, sem depender do gerenciador de anúncios.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="https://pay.hotmart.com/J105631021H" data-checkout="hotmart">Quero enxergar minhas vendas reais</a>
             <a class="btn btn-ghost" href="#prova">Ver a prova</a>
           </div>
           <p class="microcopy">Aulas gravadas. Acesso pela Hotmart. Garantia de 7 dias.</p>
-          <div class="promo-line">Oferta promocional por tempo limitado</div>
+          <!-- ARTUR: para urgência honesta, defina uma data real (ex.: "Preço de lançamento até 31/07")
+               ou deixe só "Preço de lançamento". Evite "por tempo limitado" sem data com esse público. -->
+          <div class="promo-line">Preço de lançamento</div>
           <div class="price-line">
             <span class="old-price">R$ 107,00</span>
             <span class="price">R$ 67,00</span>
@@ -698,6 +792,31 @@
       </div>
     </section>
 
+    <!-- AUTORIDADE — quem está te ensinando.
+         ARTUR: confirme o texto. NÃO invente cliente nem resultado.
+         A foto (artur.jpg) precisa estar na MESMA pasta do index.html no repo. -->
+    <section id="autoridade">
+      <div class="wrap split">
+        <div class="section-head">
+          <h2>Quem está te mostrando isso</h2>
+          <p>Não é teoria de curso. É a mesma leitura usada no dia a dia para decidir verba em loja que já vende.</p>
+        </div>
+        <div class="card author-card">
+          <img class="author-photo" src="artur.jpg" alt="Artur Becker" width="104" height="104" loading="lazy" />
+          <div>
+            <h3>Artur Becker</h3>
+            <p>Especialista em rastreamento e análise de dados para e-commerce. No dia a dia, configura GA4, Google Tag Manager (web e server-side), Meta Ads e Google Ads para lojas que investem em tráfego pago — e cruza o que o gerenciador diz com o que a loja realmente vendeu.</p>
+            <div class="author-chips">
+              <span class="tag">GA4 &amp; GTM</span>
+              <span class="tag">Server-side (Stape)</span>
+              <span class="tag">Atribuição Meta x GA4</span>
+              <span class="tag">@souarturbecker</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="metodo">
       <div class="wrap">
         <div class="section-head">
@@ -779,6 +898,21 @@
       </div>
     </section>
 
+    <!-- DEPOIMENTO — ative quando tiver 1+ aluno/beta real.
+         ARTUR: não use depoimento inventado (compliance Hotmart). Descomente e preencha.
+    <section id="depoimentos">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Quem já aplicou</h2>
+        </div>
+        <blockquote class="testimonial">
+          <p>"[frase real do aluno sobre o que ele passou a enxergar]"</p>
+          <cite>— Nome, loja/segmento</cite>
+        </blockquote>
+      </div>
+    </section>
+    -->
+
     <section>
       <div class="wrap">
         <div class="section-head">
@@ -808,7 +942,7 @@
           <span class="eyebrow">Acesso imediato pela Hotmart</span>
           <h2>Entre agora no Método das Vendas Reais.</h2>
           <p class="lead">Por R$ 67,00, você recebe as aulas gravadas para configurar sua leitura e começar a separar venda real de número inflado.</p>
-          <div class="promo-line">Promoção: de R$ 107,00 por R$ 67,00</div>
+          <div class="promo-line">Preço de lançamento: de R$ 107,00 por R$ 67,00</div>
           <div class="price-line">
             <span class="old-price">R$ 107,00</span>
             <span class="price">R$ 67,00</span>
@@ -851,7 +985,7 @@
         </details>
         <details>
           <summary>Em quanto tempo consigo usar?</summary>
-          <p>A promessa do método é te colocar para enxergar o que gera cada venda em até 7 dias, seguindo as aulas e aplicando as configurações.</p>
+          <p>A configuração é feita em poucas horas, seguindo as aulas. Assim que fica pronta, cada nova venda já passa a mostrar de onde veio — normalmente no mesmo dia. Não precisa esperar dias para começar a enxergar a origem das suas vendas.</p>
         </details>
         <details>
           <summary>E se eu comprar e não gostar?</summary>
@@ -869,13 +1003,22 @@
   </footer>
 
   <script>
+    /*
+      ATENÇÃO (fechamento de loop):
+      Este evento marca INTENÇÃO de clique no checkout, NÃO a compra.
+      O checkout acontece em pay.hotmart.com (domínio externo), então a COMPRA REAL
+      precisa vir do postback/webhook da Hotmart -> sGTM -> GA4/Meta (server-side).
+      Se você medir o lançamento só por este clique, cai exatamente no erro de
+      atribuição otimista que o curso ensina a evitar.
+    */
     document.querySelectorAll('a[data-checkout="hotmart"]').forEach(function (link) {
       link.addEventListener('click', function () {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
-          event: 'click_checkout_hotmart',
+          event: 'checkout_intent',
           product: 'Método das Vendas Reais',
-          price: 67
+          value: 67,
+          currency: 'BRL'
         });
       });
     });
