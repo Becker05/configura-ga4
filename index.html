@@ -25,6 +25,7 @@
   <meta name="twitter:title" content="Descubra o que realmente gera cada venda do seu e-commerce" />
   <meta name="twitter:description" content="Saiba a origem real de cada venda já no primeiro dia, sem depender do gerenciador de anúncios." />
   <meta name="twitter:image" content="https://lp2.ad5experts.online/og.jpg" />
+  <meta property="fb:app_id" content="1544187534389209" />
 
   <!-- CONSENT MODE v2 (padrão da casa — você ensina isso).
        Deixei PRONTO mas COMENTADO de propósito: se ativar 'denied' sem um banner
@@ -1003,24 +1004,69 @@
 
   <script>
     /*
-      ATENÇÃO (fechamento de loop):
-      Este evento marca INTENÇÃO de clique no checkout, NÃO a compra.
-      O checkout acontece em pay.hotmart.com (domínio externo), então a COMPRA REAL
-      precisa vir do postback/webhook da Hotmart -> sGTM -> GA4/Meta (server-side).
-      Se você medir o lançamento só por este clique, cai exatamente no erro de
-      atribuição otimista que o curso ensina a evitar.
+      TRACKING DA PÁGINA — faz DUAS coisas:
+
+      1) checkout_intent -> micro-conversão de funil (o clique no botão).
+         NÃO é a compra. A compra REAL vem do webhook da Hotmart (server-side).
+         Medir o lançamento só por este clique = atribuição otimista, o erro
+         que o curso ensina a evitar.
+
+      2) Carimba os identificadores no link do checkout ANTES de sair da página,
+         pro webhook conseguir costurar a venda com a sessão e o anúncio de origem:
+           sck = client_id do GA4         (costura a sessão do GA4)
+           src = _fbp ~ _fbc ~ utm_source ~ utm_medium ~ utm_campaign
+         Esses parâmetros voltam no payload do webhook (Passo 1 do runbook).
+         OBS.: confirme o limite de tamanho de src/sck no seu checkout Hotmart.
     */
-    document.querySelectorAll('a[data-checkout="hotmart"]').forEach(function (link) {
-      link.addEventListener('click', function () {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: 'checkout_intent',
-          product: 'Método das Vendas Reais',
-          value: 67,
-          currency: 'BRL'
+    (function () {
+      function getCookie(name) {
+        var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+        return m ? decodeURIComponent(m[1]) : '';
+      }
+      function ga4ClientId() {
+        // _ga = GA1.1.<client_id>  ->  "1234567890.1234567890"
+        var ga = getCookie('_ga');
+        return ga ? ga.split('.').slice(2).join('.') : '';
+      }
+      function fbc() {
+        var existing = getCookie('_fbc');
+        if (existing) return existing;
+        // se não há cookie _fbc mas veio fbclid na URL, monta o _fbc no formato do Meta
+        var fbclid = new URLSearchParams(location.search).get('fbclid');
+        return fbclid ? ('fb.1.' + Date.now() + '.' + fbclid) : '';
+      }
+      function stamp(link) {
+        try {
+          var url = new URL(link.href);
+          var p = new URLSearchParams(location.search);
+          url.searchParams.set('sck', ga4ClientId());
+          url.searchParams.set('src', [
+            getCookie('_fbp'),
+            fbc(),
+            p.get('utm_source') || '',
+            p.get('utm_medium') || '',
+            p.get('utm_campaign') || ''
+          ].join('~'));
+          link.href = url.toString();
+        } catch (e) { /* se algo falhar, mantém o link original */ }
+      }
+
+      document.querySelectorAll('a[data-checkout="hotmart"]').forEach(function (link) {
+        // pointerdown: carimba cedo (antes da navegação) p/ mouse/touch
+        link.addEventListener('pointerdown', function () { stamp(link); });
+        // click: carimba de novo (cobre ativação por teclado) e dispara o evento 1x
+        link.addEventListener('click', function () {
+          stamp(link);
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'checkout_intent',
+            product: 'Método das Vendas Reais',
+            value: 67,
+            currency: 'BRL'
+          });
         });
       });
-    });
+    })();
   </script>
 </body>
 </html>
