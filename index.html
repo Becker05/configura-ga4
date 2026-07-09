@@ -155,12 +155,15 @@
 
     .hero-grid {
       position: relative;
-      display: block;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap: 34px;
+      align-items: center;
       z-index: 2;
     }
 
     .hero-copy {
-      width: min(700px, 100%);
+      min-width: 0;
     }
 
     .eyebrow {
@@ -211,6 +214,14 @@
       flex-wrap: wrap;
     }
 
+    .old-price {
+      color: var(--muted);
+      font-size: 18px;
+      text-decoration: line-through;
+      text-decoration-color: var(--red);
+      text-decoration-thickness: 2px;
+    }
+
     .price {
       font-size: 42px;
       line-height: 1;
@@ -218,18 +229,24 @@
       color: var(--green);
     }
 
+    .promo-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      color: #dfffee;
+      font-weight: 800;
+    }
+
     .device {
-      position: absolute;
-      top: 92px;
-      right: 0;
-      width: min(520px, 44vw);
-      z-index: 1;
+      position: relative;
+      width: 100%;
+      z-index: 2;
       border: 1px solid var(--line);
       border-radius: 18px;
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       box-shadow: var(--shadow);
       padding: 14px;
-      transform: perspective(1100px) rotateY(-8deg) rotateX(2deg);
     }
 
     .screen {
@@ -508,12 +525,7 @@
       }
 
       .device {
-        position: relative;
-        top: auto;
-        right: auto;
-        width: 100%;
         margin-top: 34px;
-        transform: none;
       }
 
       .proof-row {
@@ -584,7 +596,9 @@
             <a class="btn btn-ghost" href="#prova">Ver a prova</a>
           </div>
           <p class="microcopy">Aulas gravadas. Acesso pela Hotmart. Garantia de 7 dias.</p>
+          <div class="promo-line">Oferta promocional por tempo limitado</div>
           <div class="price-line">
+            <span class="old-price">R$ 107,00</span>
             <span class="price">R$ 67,00</span>
             <span class="muted">pagamento único</span>
           </div>
@@ -794,7 +808,9 @@
           <span class="eyebrow">Acesso imediato pela Hotmart</span>
           <h2>Entre agora no Método das Vendas Reais.</h2>
           <p class="lead">Por R$ 67,00, você recebe as aulas gravadas para configurar sua leitura e começar a separar venda real de número inflado.</p>
+          <div class="promo-line">Promoção: de R$ 107,00 por R$ 67,00</div>
           <div class="price-line">
+            <span class="old-price">R$ 107,00</span>
             <span class="price">R$ 67,00</span>
             <span class="muted">garantia incondicional de 7 dias</span>
           </div>
