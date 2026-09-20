@@ -770,6 +770,112 @@
       }
     }
 
+    /* CTA sizes and interaction */
+    .topbar {
+      border-bottom: 1px solid var(--line);
+    }
+
+    main .button,
+    .hero .button,
+    .mobile-first-cta .button {
+      width: min(100%, 460px);
+      min-width: 0;
+      min-height: 74px;
+      margin-top: 0;
+      padding: 18px 30px;
+      font-size: 1.12rem;
+      box-shadow: 0 8px 24px rgba(237, 103, 34, .17);
+    }
+
+    .button:active {
+      transform: translateY(0) scale(.985);
+      box-shadow: 0 4px 12px rgba(237, 103, 34, .16);
+    }
+
+    .arrow {
+      flex: none;
+      transition: transform .22s ease;
+    }
+
+    .button:hover .arrow,
+    .button:focus-visible .arrow {
+      transform: translate(3px, -3px);
+    }
+
+    .hero {
+      border-bottom: 5px solid var(--orange);
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--line);
+    }
+
+    .three article,
+    .steps article {
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .three article:hover,
+    .steps article:hover {
+      transform: translateY(-4px);
+    }
+
+    .three article:hover {
+      border-color: var(--orange);
+    }
+
+    .step-number {
+      transition: background .25s ease;
+    }
+
+    .steps article:hover .step-number {
+      background: var(--orange);
+    }
+
+    .portrait {
+      box-shadow: 18px 18px 0 rgba(23, 25, 26, .08);
+    }
+
+    .faq details[open] {
+      border-top-color: var(--orange);
+    }
+
+    .faq summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary::after {
+      content: "+";
+      color: var(--orange);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1;
+      transition: transform .22s ease;
+    }
+
+    .faq details[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    @media (max-width: 800px) {
+      main .button,
+      .hero .button,
+      .mobile-first-cta .button {
+        width: 100%;
+        height: 88px;
+        min-height: 88px;
+        padding: 12px 18px;
+      }
+    }
+
     /* =========================
        ANIMAÇÃO NO SCROLL
     ========================== */
@@ -797,6 +903,19 @@
       }
 
       .button {
+        transition: none;
+      }
+
+      .button:hover,
+      .button:active,
+      .three article:hover,
+      .steps article:hover {
+        transform: none;
+      }
+
+      .arrow,
+      .faq summary::after,
+      .step-number {
         transition: none;
       }
     }
